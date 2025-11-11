@@ -1,16 +1,57 @@
-xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters)
+function xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters)
 
-if 0 <= t <= doublet_time
+%% Purpose:
+% Define derivative of a state vector of 12 x N components for input into ode45 to achieve a final
+% state vector and how it evolves w.r.t time with a doublet added to elevator control input
+
+% Inputs: 
+% 1.) t == time --> time steps will be decided automatically by the computer when used in ode45
+% 2.) aircraft_state == state vector of 12 x N that will be numerically integrated to solve for by the computer
+% 3.) aoircraft_surfaces == vector of four aircraft surfaces including [delta_e, delta_a, delta_r, delta_t]^T
+% 4.) doublet_size == size of doublet portion added to elevator control surface, delta_e
+% 5.) doublet_time == time the doublet pulses in conjunction with the elevator control surface
+% 6.) wind_inertial == the wind vector expressed in inertial coordinates as: [w_x, w_y, w_z]^T
+% 7.) aircraft_parameters == necessary coefficients and structural parameters of the twistor aircraft
+
+
+
+
+
+
+
+%% Insert rest of original AircraftEOM HERE!!
+
+
+
+
+
+
+
+
+%% Create if statements to define delta_e with respect to time (i.e designed as a piecewise function)
+
+% Preallocate variable sizes
+delta_e = zeros(1, length(time));
+
+
+
+% Loop
+
+for i  = 1:length(time)
+
+if 0 < time(i) && time(i) <= doublet_time(i)
     
-    delta_e = delta_e_trim + doublet_size;
+    delta_e(i) = delta_e_trim + doublet_size;
     
-elseif doublet_time < t <= 2*doublet_time
+elseif doublet_time(i) < time(i) && time(i) <= 2*doublet_time(i)
     
-    delta_e = delta_e_trim - doublet_size;
+    delta_e(i) = delta_e_trim - doublet_size(i);
     
-elseif t >= 2*doublet_time
+elseif time(i) >= 2*doublet_time(i)
     
-    delta_e = delta_e_trim;
+    delta_e(i) = delta_e_trim;
     
 end
 
+end
+end
