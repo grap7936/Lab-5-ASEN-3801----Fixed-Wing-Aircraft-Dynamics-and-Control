@@ -1,0 +1,16 @@
+xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters)
+
+if 0 <= t <= doublet_time
+    
+    delta_e = delta_e_trim + doublet_size;
+    
+elseif doublet_time < t <= 2*doublet_time
+    
+    delta_e = delta_e_trim - doublet_size;
+    
+elseif t >= 2*doublet_time
+    
+    delta_e = delta_e_trim;
+    
+end
+
