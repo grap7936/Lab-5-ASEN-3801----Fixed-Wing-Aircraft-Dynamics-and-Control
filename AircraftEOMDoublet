@@ -1,4 +1,4 @@
-function xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters)
+function xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters, control_input_array0)
 
 %% Purpose:
 % Define derivative of a state vector of 12 x N components for input into ode45 to achieve a final
@@ -12,6 +12,8 @@ function xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doub
 % 5.) doublet_time == time the doublet pulses in conjunction with the elevator control surface
 % 6.) wind_inertial == the wind vector expressed in inertial coordinates as: [w_x, w_y, w_z]^T
 % 7.) aircraft_parameters == necessary coefficients and structural parameters of the twistor aircraft
+% 8.) control_input0 == initial conditions for controls read in to determine trim variables. Has 
+% form [delta_e_trim, delta_a_trim, delta_r_trim, delta_t_trim]^T
 
 
 
@@ -27,6 +29,7 @@ function xdot = AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doub
 
 
 
+delta_e_trim = control_input_array0(1);
 
 %% Create if statements to define delta_e with respect to time (i.e designed as a piecewise function)
 
