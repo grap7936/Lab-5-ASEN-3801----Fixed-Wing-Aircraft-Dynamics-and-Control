@@ -7,10 +7,10 @@ clc;
 clear;
 close all;
 
-% Calls the ttwistor function
+%% Calls the ttwistor function to set up parameters
 aircraft_parameters = ttwistor;
 
-% Simulation setup
+%% Figure setup
 fig_case1 = [1, 2, 3, 4, 5, 6];
 fig_case2 = [7, 8, 9, 10, 11, 12];
 fig_case3 = [13, 14, 15, 16, 17, 18];
@@ -21,7 +21,10 @@ col_case1 = PlotOptions{1};
 col_case2 = PlotOptions{2};
 col_case3 = PlotOptions{3};
 
-% User input to select the part to run
+% Toggle Plots
+graph_AC_sim = 1;
+
+%% User input to select the part to run
 part_to_run = input('Enter the part number to run ( 1, 2, 3): ');
 switch part_to_run
 
@@ -40,6 +43,7 @@ u0_1 = [0; 0; 0; 0];
 w0_1 = [0; 0; 0];
 
 [t_1, states_1] = ode45(@(time, aircraft_state) AircraftEOM(time, aircraft_state, u0_1, w0_1, aircraft_parameters), tspan, initial_conditions1);
+states_1 = states_1'; % transpose for poltting conventions
 
 % Calls the plot function and creates the plots
 PlotAircraftSim(t_1, states_1, u0_1, fig_case1, col_case1, graph_AC_sim)

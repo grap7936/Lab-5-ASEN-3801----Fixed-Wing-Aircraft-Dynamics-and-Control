@@ -84,5 +84,5 @@ xdot(10) = (Gamma(1) * p * q - Gamma(2) * q * r) + (Gamma(3) * aero_moments(1) +
 xdot(11) = (Gamma(5) * p * r - Gamma(6) * (p^2 - r^2)) + (1 / aircraft_parameters.Iy * aero_moments(2));
 xdot(12) = (Gamma(7) * p * q - Gamma(1) * q * r) + (Gamma(4) * aero_moments(1) + Gamma(8) * aero_moments(3));
 
-
+xdot = xdot'
 end
