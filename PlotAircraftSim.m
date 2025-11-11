@@ -1,6 +1,6 @@
 %% Function 1 -- Plotting Aircraft Parameters
 
-function PlotAircraftSim(time, aircraft_state_array, control_input_array, const, fig, col, graph_AC_sim)
+function PlotAircraftSim(time, aircraft_state_array, control_input_array, fig, col, graph_AC_sim)
 
 %{
 % Purpose: Plots 4 figures with subplots indicating inertial position, euler angles, inertial
