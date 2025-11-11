@@ -1,3 +1,4 @@
+function xdot = AircraftEOM(time, aircraft_state, aircraft_surfaces, wind_inertial, aircraft_parameters)
 % Author: Lucas Nussbamer
 % 
 % File name: AircraftEOM.m
@@ -14,7 +15,7 @@
 %
 % Outputs:
 %   xdot              - Time derivative of the state vector (6x1 vector)
-function xdot = AircraftEOM(time, aircraft_state, aircraft_surfaces, wind_inertial, aircraft_parameters)
+
 
 %% Upacking 
 % Unpack the state vector
@@ -31,27 +32,18 @@ p = aircraft_state(10);
 q = aircraft_state(11);
 r = aircraft_state(12);
 
-% Unpack the control surfaces
-delta_elevator = aircraft_surfaces(1);
-delta_aileron = aircraft_surfaces(2);
-delta_rudder = aircraft_surfaces(3);
+% % Unpack the control surfaces
+% delta_elevator = aircraft_surfaces(1);
+% delta_aileron = aircraft_surfaces(2);
+% delta_rudder = aircraft_surfaces(3);
+% delta_thrust = aircraft_surfaces(4);
+% 
+% 
+% % Unpack the wind components
+% wind_u = wind_inertial(1);
+% wind_v = wind_inertial(2);
+% wind_w = wind_inertial(3);
 
-
-% Unpack the wind components
-wind_u = wind_inertial(1);
-wind_v = wind_inertial(2);
-wind_w = wind_inertial(3);
-
-
-% Unpack the aircraft parameters
-mass = aircraft_parameters(1);
-I_xx = aircraft_parameters(2);
-I_yy = aircraft_parameters(3);
-I_zz = aircraft_parameters(4);
-I_xy = aircraft_parameters(5);
-I_xz = aircraft_parameters(6);
-I_yz = aircraft_parameters(7);
-g = aircraft_parameters(8);
 
 %% Additional set up
 
@@ -60,31 +52,37 @@ R_BI = [ cos(theta)*cos(psi),  sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi),  
          cos(theta)*sin(psi),  sin(phi)*sin(theta)*sin(psi)+cos(phi)*cos(psi),  cos(phi)*sin(theta)*sin(psi)-sin(phi)*cos(psi);
         -sin(theta),           sin(phi)*cos(theta),                             cos(phi)*cos(theta)                          ];
 
+% Get density
+density = stdatmo(z_E);
+
+% Get gammas
+[~, Gamma] = gammas(aircraft_parameters);
+
 %% Calculate the vector derivative
 
 % Position changes (xdot_E, ydot_E, zdot_E)
 xdot(1:3) = R_BI * [u_E; v_E; w_E]; 
 
 % Euler Angle changes (phidot, thetadot, psidot)
-xdot(4:6)
+xdot(4:6) = [1,     sin(phi)*tan(theta),        cos(phi)*tan(theta);
+             0,     cos(phi),                   -sin(phi);
+             0,     sin(phi)*sec(theta),        cos(phi)*sec(theta)] * [p; q; r];
 
 
+% Get aero forces and monets from the function
+[aero_forces, aero_moments] = AeroForcesAndMoments(aircraft_state, aircraft_surfaces, wind_inertial, density, aircraft_parameters);
 
 
+% Velocity changes (udot_E, vdot_E, wdot_E)
+xdot(7) = r*v_E - q*w_E - aircraft_parameters.g*sin(theta) + (aero_forces(1)/aircraft_parameters.m);
+xdot(8) = p*w_E - r*u_E + aircraft_parameters.g*cos(theta)*sin(phi) + (aero_forces(2)/aircraft_parameters.m);            
+xdot(9) = q*u_E - p*v_E + aircraft_parameters.g*cos(theta)*cos(phi) + (aero_forces(3)/aircraft_parameters.m);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+% attitude rate changes (pdot, qdot, rdot)
+xdot(10) = (Gamma(1) * p * q - Gamma(2) * q * r) + (Gamma(3) * aero_moments(1) + Gamma(4) * aero_moments(3));
+xdot(11) = (Gamma(5) * p * r - Gamma(6) * (p^2 - r^2)) + (1 / aircraft_parameters.Iy * aero_moments(2));
+xdot(12) = (Gamma(7) * p * q - Gamma(1) * q * r) + (Gamma(4) * aero_moments(1) + Gamma(8) * aero_moments(3));
 
 
 end
