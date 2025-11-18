@@ -148,7 +148,7 @@ ylabel("V_E in [m/s]")
 hold on
 subplot(3,1,3)
 plot(time, w_E, col);
-yline(0, col)
+% yline(0, col)
 title("W Inertial Velocity in Body Frame w.r.t Time")
 xlabel("Time in [s]")
 ylabel("W_E in [m/s]")
@@ -220,7 +220,6 @@ title("3D aircraft path expressed in body frame coordinates")
 xlabel("X_E position in [m]")
 ylabel("Y_E position in [m]")
 legend("Z_E position in [m]")
-zlim([0 5])
 
 elseif graph_AC_sim == 0
 end
