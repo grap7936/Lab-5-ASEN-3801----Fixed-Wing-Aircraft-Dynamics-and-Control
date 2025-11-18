@@ -20,7 +20,7 @@ fig_case2 = [7, 8, 9, 10, 11, 12];
 fig_case3 = [13, 14, 15, 16, 17, 18];
 
 % Plot colors and options
-PlotOptions = {'b-', 'r--', 'g-'};
+PlotOptions = {'b-', 'r-', 'g-'};
 col_case1 = PlotOptions{1};
 col_case2 = PlotOptions{2};
 col_case3 = PlotOptions{3};
