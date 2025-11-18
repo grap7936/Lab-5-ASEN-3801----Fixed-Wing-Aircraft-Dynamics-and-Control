@@ -27,7 +27,7 @@ PlotAircraftSim(t_3part1sp, states_3part1sp, u0_3, fig_case5, col_case5, graph_A
 T_sh = 1.5 - 0.5;
 w_d_sh = (2*pi)/T_sh;
 % find delta?
-damp_ratio_sh = delta/(sqrt((4*pi)^2 + delta));
+damp_ratio_sh = delta/(sqrt((4*pi)^2 + delta^2));
 w_n_sh = w_d/(sqrt(1-damp_ratio_sh^2));
 
 % part 2
@@ -43,6 +43,6 @@ T_ph = 100;
 w_d_ph = (2*pi)/T_sh;
 % find delta?
 % delta = log(abs(x1/x2));
-damp_ratio_ph = delta/(sqrt((4*pi)^2 + delta));
+damp_ratio_ph = delta/(sqrt((4*pi)^2 + delta^2));
 w_n_ph = w_d/(sqrt(1-damp_ratio_sh^2));
 
