@@ -19,19 +19,21 @@ fig_case1 = [1, 2, 3, 4, 5, 6];
 fig_case2 = [7, 8, 9, 10, 11, 12];
 fig_case3 = [13, 14, 15, 16, 17, 18];
 fig_case4 = [19, 20, 21, 22, 23, 24];
+fig_case5 = [25, 26, 27, 28, 29, 30];
 
 % Plot colors and options
-PlotOptions = {'b-', 'r--', 'g-', 'b-'};
+PlotOptions = {'b-', 'r--', 'g-', 'b-', 'r--'};
 col_case1 = PlotOptions{1};
 col_case2 = PlotOptions{2};
 col_case3 = PlotOptions{3};
 col_case4 = PlotOptions{4};
+col_case5 = PlotOptions{5};
 
 % Toggle Plots
 graph_AC_sim = 1;
 
 %% User input to select the part to run
-part_to_run = input('Enter the part number to run ( 1, 2, 3, 4): ');
+part_to_run = input('Enter the part number to run ( 1, 2, 3, 4, 5): ');
 switch part_to_run
 
 case 1
@@ -137,7 +139,7 @@ PlotAircraftSim(t_3, states_3, control_input_array3, fig_case3, col_case3, graph
 %% Case 4: Aircraft initial state and control input trim values
 
 % Time span
-tspan = linspace(0, 100, 1000);
+tspan = linspace(0, 3, 1000);
 
 % doublet parameters
 doublet_time = 0.25; % doublet time in [s]
@@ -164,6 +166,40 @@ control_input_array4 = [delta_e; control4_2; control4_3; control4_4];
 
 % Calls the plot function and creates the plots
 PlotAircraftSim(t_4, states_4, control_input_array4, fig_case4, col_case4, graph_AC_sim)
+
+
+    case 5
+%% Case 5: Aircraft initial state and control input trim values
+
+% Time span
+tspan = linspace(0, 100, 1000);
+
+% doublet parameters
+doublet_time = 0.25; % doublet time in [s]
+doublet_size = deg2rad(15); % doublet size in [rad]
+
+% initial condition vector
+% Units: x0_2 = [m; m; m; deg; rad; deg; m/s; m/s; m/s; deg/s; deg/s; deg/s]
+initial_conditions5 = [0, 0, -1800, 0, 0.02780, 0, 20.99, 0, 0.5837, 0, 0, 0]';
+
+% Control surface input vector
+u0_5 = [0.1079; 0; 0; 0.3182];
+w0_5 = [0; 0; 0];
+
+[t_5, states_5] = ode45(@(time, aircraft_state) AircraftEOMDoublet(time, aircraft_state, u0_5, doublet_size, doublet_time, w0_5, aircraft_parameters), tspan, initial_conditions5);
+states_5 = states_5';
+
+delta_e = OutputDelta_e(t_5, u0_5, doublet_time, doublet_size);
+
+control5_2 = u0_5(2)*ones(1,length(t_5));
+control5_3 = u0_5(3)*ones(1,length(t_5));
+control5_4 = u0_5(4)*ones(1,length(t_5));
+
+control_input_array5 = [delta_e; control5_2; control5_3; control5_4];
+
+% Calls the plot function and creates the plots
+PlotAircraftSim(t_5, states_5, control_input_array5, fig_case5, col_case5, graph_AC_sim)
+
 
 end
 
