@@ -29,7 +29,7 @@ part_to_run = input('Enter the part number to run ( 1, 2, 3): ');
 switch part_to_run
 
 case 1
-%% Case 2: Initial Conditions = 0 Except for u
+%% Case 1: Initial Conditions = 0 Except for u
 
 % Time span
 tspan = linspace(0, 100, 1000);
