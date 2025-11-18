@@ -29,7 +29,7 @@ part_to_run = input('Enter the part number to run ( 1, 2, 3): ');
 switch part_to_run
 
 case 1
-%% Case 2: Initial Conditions = 0 Except for u
+%% Case 1: Initial Conditions = 0 Except for u
 
 % Time span
 tspan = linspace(0, 100, 1000);
@@ -37,12 +37,13 @@ tspan = linspace(0, 100, 1000);
 % initial condition vector
 % Units: x0_3 = [m; m; m; deg; deg; deg; m/s; m/s; m/s; deg/s; deg/s; deg/s]
 initial_conditions1 = [0; 0; 1609.34; 0; 0; 0; 21; 0; 0; 0; 0; 0];
-
+dTime = 0.25;
+dSize = deg2rad(15);
 % Control surface input vector
 u0_1 = [0; 0; 0; 0];
 w0_1 = [0; 0; 0];
 
-[t_1, states_1] = ode45(@(time, aircraft_state) AircraftEOM(time, aircraft_state, u0_1, w0_1, aircraft_parameters), tspan, initial_conditions1);
+[t_1, states_1] = ode45(@(time, aircraft_state) AircraftEOMDoublet(time, aircraft_state, u0_1, dSize, dTime, w0_1, aircraft_parameters), tspan, initial_conditions1);
 states_1 = states_1'; % transpose for poltting conventions
 
 % Calls the plot function and creates the plots
