@@ -1,0 +1,48 @@
+%% problem 3
+
+% part 1
+% which delta e trim to use?
+delta_e_trim = 0.1079; %rad
+%delta_e_trim = 5*(pi/180); %rad
+
+tspan_3 = [0,3];
+doublet_size = 15*(pi/180); %rad
+doublet_time = 0.25; 
+
+[t_3part1, states_3part1] = ode45(@(time, aircraft_state)
+AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters), tspan_3, initial_conditions2;
+
+PlotAircraftSim(t_3part1, states_3part1, u0_3, fig_case4, col_case4, graph_AC_sim)
+
+% short period
+
+tspan_3sp = [0.5, 1.5];
+
+[t_3part1sp, states_3part1sp] = ode45(@(time, aircraft_state)
+AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters), tspan_3sp, initial_conditions2;
+
+PlotAircraftSim(t_3part1sp, states_3part1sp, u0_3, fig_case5, col_case5, graph_AC_sim)
+
+%estimate natural frequency and damping ratio
+T_sh = 1.5 - 0.5;
+w_d_sh = (2*pi)/T_sh;
+% find delta?
+damp_ratio_sh = delta/(sqrt((4*pi)^2 + delta));
+w_n_sh = w_d/(sqrt(1-damp_ratio_sh^2));
+
+% part 2
+tspan_3ph = [0, 100];
+
+[t_3part2, states_3part2] = ode45(@(time, aircraft_state)
+AircraftEOMDoublet(time, aircraft_state, aircraft_surfaces, doublet_size, doublet_time, wind_inertial, aircraft_parameters), tspan_3ph, initial_conditions2;
+
+PlotAircraftSim(t_3part2, states_3part2, u0_3, fig_case6, col_case6, graph_AC_sim)
+
+%estimate natural frequency and damping ratio
+T_ph = 100;
+w_d_ph = (2*pi)/T_sh;
+% find delta?
+% delta = log(abs(x1/x2));
+damp_ratio_ph = delta/(sqrt((4*pi)^2 + delta));
+w_n_ph = w_d/(sqrt(1-damp_ratio_sh^2));
+
